@@ -6,7 +6,6 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    // اگر src داری: "./src/**/*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
     container: {
@@ -15,21 +14,9 @@ const config: Config = {
       screens: {
         "2xl": "1400px",
       },
-      extend: {
-  colors: {
-    amber: {
-      300: '#fcd34d',
-      600: '#d97706',
-      700: '#b45309',
-      900: '#78350f',
-    },
-    stone: {
-      800: '#1e293b',
-    },
-  },
-}
     },
     extend: {
+      // اینجا extend میاد (رنگ‌ها، borderRadius، keyframes و ...)
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -63,6 +50,16 @@ const config: Config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // رنگ‌های سفارشی قلعه‌ای
+        amber: {
+          300: '#fcd34d',
+          600: '#d97706',
+          700: '#b45309',
+          900: '#78350f',
+        },
+        stone: {
+          800: '#1e293b',
         },
       },
       borderRadius: {
