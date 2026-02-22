@@ -5,7 +5,7 @@ export default function Home() {
     <div 
       className="min-h-screen bg-cover bg-fixed flex items-center justify-center relative overflow-hidden"
       style={{
-        backgroundImage: "url('/castle-texture.jpg')",
+        backgroundImage: "url('/castle-bg.jpg')",
       }}
     >
       {/* Overlay قلعه‌ای حرفه‌ای */}

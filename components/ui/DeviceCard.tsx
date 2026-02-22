@@ -3,11 +3,12 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Lightbulb, LightbulbOff, Video, Zap } from "lucide-react"  // Zap برای power
+import { Lightbulb, LightbulbOff, Video } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface DeviceCardProps {
   name: string
-  iconType: "light" | "camera" | "power"  // ← اینجا "power" اضافه شد
+  iconType: "light" | "camera"
   status: boolean
 }
 
@@ -15,37 +16,47 @@ export function DeviceCard({ name, iconType, status }: DeviceCardProps) {
   const [isOn, setIsOn] = useState(status)
 
   const Icon = isOn 
-    ? (iconType === "light" ? Lightbulb : iconType === "camera" ? Video : Zap)
-    : (iconType === "light" ? LightbulbOff : iconType === "camera" ? Video : Zap)
+    ? (iconType === "light" ? Lightbulb : Video)
+    : (iconType === "light" ? LightbulbOff : Video)
 
   return (
     <Card 
-      className={`
-        relative bg-black/30 backdrop-blur-2xl border border-amber-600/40 
-        shadow-xl hover:shadow-[0_0_30px_10px_rgba(245,158,11,0.3)] 
-        hover:border-amber-500/70 transition-all duration-500 hover:scale-[1.04] group
-      `}
+      className={cn(
+        "relative bg-black/30 backdrop-blur-2xl border border-amber-600/40 rounded-2xl overflow-hidden",
+        "shadow-xl transition-all duration-700 group",
+        isOn ? "animate-magic-glow border-amber-500/70 shadow-[0_0_35px_12px_rgba(245,158,11,0.4)]" : "",
+        "hover:shadow-[0_0_40px_15px_rgba(245,158,11,0.5)] hover:border-amber-500/80 hover:scale-[1.04]"
+      )}
     >
-      {/* افکت نور ملایم هنگام روشن بودن */}
+      {/* افکت درخشش جادویی داخل کارت وقتی روشن هست */}
       {isOn && (
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent opacity-80 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-radial from-amber-500/30 via-amber-600/10 to-transparent opacity-90 pointer-events-none animate-pulse-slow" />
       )}
 
       <CardHeader className="pb-3 relative z-10">
-        <CardTitle className="text-amber-200 flex items-center gap-4 text-2xl font-cinzel">
-          <Icon className={`h-9 w-9 ${isOn ? 'text-amber-400 animate-pulse' : 'text-gray-500'}`} />
+        <CardTitle className="text-amber-200 flex items-center gap-4 text-2xl font-cinzel tracking-wide">
+          <Icon 
+            className={cn(
+              "h-9 w-9 transition-all duration-500",
+              isOn ? "text-amber-400 animate-pulse scale-110 drop-shadow-[0_0_15px_rgba(245,158,11,0.8)]" : "text-gray-500"
+            )} 
+          />
           {name}
         </CardTitle>
       </CardHeader>
+
       <CardContent className="relative z-10">
         <div className="flex items-center justify-between">
-          <span className="text-xl font-medium text-gray-100">
+          <span className={cn(
+            "text-xl font-medium transition-colors duration-500",
+            isOn ? "text-amber-300 drop-shadow-md" : "text-gray-300"
+          )}>
             {isOn ? "Illuminated" : "Darkened"}
           </span>
           <Switch 
             checked={isOn}
             onCheckedChange={setIsOn}
-            className="data-[state=checked]:bg-amber-600 data-[state=unchecked]:bg-gray-700"
+            className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-amber-600 data-[state=checked]:to-amber-500 data-[state=unchecked]:bg-gray-700"
           />
         </div>
       </CardContent>
