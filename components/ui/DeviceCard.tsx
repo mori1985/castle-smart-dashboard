@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Lightbulb, LightbulbOff, Video } from "lucide-react"
@@ -9,11 +9,43 @@ import { cn } from "@/lib/utils"
 interface DeviceCardProps {
   name: string
   iconType: "light" | "camera"
-  status: boolean
+  initialStatus: boolean
+  deviceId: string          // ← این خیلی مهم است (شناسه منحصربه‌فرد)
 }
 
-export function DeviceCard({ name, iconType, status }: DeviceCardProps) {
-  const [isOn, setIsOn] = useState(status)
+export function DeviceCard({ name, iconType, initialStatus, deviceId }: DeviceCardProps) {
+  const [isOn, setIsOn] = useState(initialStatus)
+
+  // بارگذاری وضعیت از localStorage (با چک ایمنی کامل)
+useEffect(() => {
+  try {
+    const saved = localStorage.getItem(`device-${deviceId}`);
+    
+    // اگر saved وجود داشت و null نبود
+    if (saved !== null) {
+      // چک کن که رشته معتبر JSON باشه
+      if (saved === "undefined" || saved === "null" || saved.trim() === "") {
+        // اگر داده خراب بود، وضعیت اولیه رو استفاده کن و پاکش کن
+        localStorage.removeItem(`device-${deviceId}`);
+      } else {
+        const parsed = JSON.parse(saved);
+        // فقط boolean قبول کن
+        if (typeof parsed === 'boolean') {
+          setIsOn(parsed);
+        }
+      }
+    }
+  } catch (error) {
+    console.error(`Error parsing localStorage for ${deviceId}:`, error);
+    // اگر ارور داد، وضعیت اولیه رو نگه دار و کلید رو پاک کن
+    localStorage.removeItem(`device-${deviceId}`);
+  }
+}, [deviceId]);
+
+  // ذخیره وضعیت جدید
+  useEffect(() => {
+    localStorage.setItem(`device-${deviceId}`, JSON.stringify(isOn))
+  }, [isOn, deviceId])
 
   const Icon = isOn 
     ? (iconType === "light" ? Lightbulb : Video)
@@ -24,11 +56,10 @@ export function DeviceCard({ name, iconType, status }: DeviceCardProps) {
       className={cn(
         "relative bg-black/30 backdrop-blur-2xl border border-amber-600/40 rounded-2xl overflow-hidden",
         "shadow-xl transition-all duration-700 group",
-        isOn ? "animate-magic-glow border-amber-500/70 shadow-[0_0_35px_12px_rgba(245,158,11,0.4)]" : "",
+        isOn && "animate-magic-glow border-amber-500/70 shadow-[0_0_35px_12px_rgba(245,158,11,0.4)]",
         "hover:shadow-[0_0_40px_15px_rgba(245,158,11,0.5)] hover:border-amber-500/80 hover:scale-[1.04]"
       )}
     >
-      {/* افکت درخشش جادویی داخل کارت وقتی روشن هست */}
       {isOn && (
         <div className="absolute inset-0 bg-gradient-radial from-amber-500/30 via-amber-600/10 to-transparent opacity-90 pointer-events-none animate-pulse-slow" />
       )}

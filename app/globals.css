@@ -153,3 +153,17 @@
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* درخشش جادویی قوی برای قاب عنوان‌ها */
+@keyframes magic-glow-strong {
+  0%, 100% { 
+    box-shadow: 0 0 30px 10px rgba(245, 158, 11, 0.5); 
+  }
+  50% { 
+    box-shadow: 0 0 70px 30px rgba(245, 158, 11, 0.9); 
+  }
+}
+
+.animate-magic-glow-strong {
+  animation: magic-glow-strong 3.5s ease-in-out infinite;
+}
