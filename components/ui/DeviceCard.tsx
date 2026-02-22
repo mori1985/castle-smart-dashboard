@@ -3,11 +3,11 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Lightbulb, LightbulbOff, Video, Zap } from "lucide-react"
+import { Lightbulb, LightbulbOff, Video, Zap } from "lucide-react"  // Zap برای power
 
 interface DeviceCardProps {
   name: string
-  iconType: "light" | "camera" | "power" // برای انتخاب آیکون درست
+  iconType: "light" | "camera" | "power"  // ← اینجا "power" اضافه شد
   status: boolean
 }
 
@@ -21,9 +21,9 @@ export function DeviceCard({ name, iconType, status }: DeviceCardProps) {
   return (
     <Card 
       className={`
-        relative bg-black/40 backdrop-blur-2xl border border-amber-600/30 
-        shadow-xl hover:shadow-glow-amber hover:border-amber-500/60 
-        transition-all duration-500 hover:scale-[1.04] group overflow-hidden
+        relative bg-black/30 backdrop-blur-2xl border border-amber-600/40 
+        shadow-xl hover:shadow-[0_0_30px_10px_rgba(245,158,11,0.3)] 
+        hover:border-amber-500/70 transition-all duration-500 hover:scale-[1.04] group
       `}
     >
       {/* افکت نور ملایم هنگام روشن بودن */}
@@ -33,16 +33,14 @@ export function DeviceCard({ name, iconType, status }: DeviceCardProps) {
 
       <CardHeader className="pb-3 relative z-10">
         <CardTitle className="text-amber-200 flex items-center gap-4 text-2xl font-cinzel">
-          <Icon 
-            className={`h-8 w-8 ${isOn ? 'text-amber-400 animate-pulse' : 'text-gray-500'}`} 
-          />
+          <Icon className={`h-9 w-9 ${isOn ? 'text-amber-400 animate-pulse' : 'text-gray-500'}`} />
           {name}
         </CardTitle>
       </CardHeader>
       <CardContent className="relative z-10">
         <div className="flex items-center justify-between">
           <span className="text-xl font-medium text-gray-100">
-            {isOn ? "Active" : "Inactive"}
+            {isOn ? "Illuminated" : "Darkened"}
           </span>
           <Switch 
             checked={isOn}
